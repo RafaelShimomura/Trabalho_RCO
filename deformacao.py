@@ -3,7 +3,7 @@ import math
 
 def deformacao(num, h, lam_ori_rad, Qg_inv, esf):
 
-    def_global = np.zeros(3*num)
+    def_global = np.zeros(num)
     def_global = def_global.ravel().tolist()
 
     def_local = np.zeros(num)
@@ -19,7 +19,7 @@ def deformacao(num, h, lam_ori_rad, Qg_inv, esf):
     k_medio = np.reshape(k_medio, (3,1))
 
     #--------------------Deformação da Lamina---------------------   
-    for lamina in range(3*num):
+    for lamina in range(num):
         def_global[lamina] = def_medio + h[lamina]*k_medio   
 
     #---------------------------Matriz R----------------------------

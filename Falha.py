@@ -1,42 +1,41 @@
 import numpy as np
 
 def TsaiHill(sigma, material):
-    sigma_1 = sigma[0]
-    sigma_2 = sigma[1]
-    sigma_12 = sigma[2]
-    print(sigma_1)
-    Xt = material[4]
-    Yt = material[5]
-    Xc = material[6]
-    Yc = material[7]
-    S12 = material[8]
+    sigma_1 = sigma[0][0]
+    sigma_2 = sigma[1][0]
+    sigma_12 = sigma[2][0]
+    Xt = material[0]
+    Yt = material[1]
+    Xc = material[2]
+    Yc = material[3]
+    S12 = material[4]
 
     if sigma_1 > 0 and sigma_2 > 0:
-        f = (sigma_1/Xt)**2 + (sigma_2/Yt)**2 - (sigma_1*sigma_2/Xt**2) + (sigma_12/S12)**2
-        FS = np.sqrt(f)
+        f = (sigma_1/Xt)*2 + (sigma_2/Yt)**2 - (sigma_1*sigma_2/Xt*2) + (sigma_12/S12)**2
+        FS = np.sqrt(abs(f))
     elif sigma_1 > 0 and sigma_2 < 0:
-        f = (sigma_1/Xt)**2 + (sigma_2/Yc)**2 + (sigma_1*sigma_2/Xt**2) + (sigma_12/S12)**2
-        FS = np.sqrt(f)
+        f = (sigma_1/Xt)*2 + (sigma_2/Yc)**2 + (sigma_1*sigma_2/Xt*2) + (sigma_12/S12)**2
+        FS = np.sqrt(abs(f))
     elif sigma_1 < 0 and sigma_2 < 0:
-        f = (sigma_1/Xc)**2 + (sigma_2/Yc)**2 - (sigma_1*sigma_2/Xc**2) + (sigma_12/S12)**2
-        FS = np.sqrt(f)
+        f = (sigma_1/Xc)*2 + (sigma_2/Yc)**2 - (sigma_1*sigma_2/Xc*2) + (sigma_12/S12)**2
+        FS = np.sqrt(abs(f))
     else:
-        f = (sigma_1/Xc)**2 + (sigma_2/Yt)**2 + (sigma_1*sigma_2/Xc**2) + (sigma_12/S12)**2
-        FS = np.sqrt(f)
+        f = (sigma_1/Xc)*2 + (sigma_2/Yt)**2 + (sigma_1*sigma_2/Xc*2) + (sigma_12/S12)**2
+        FS = np.sqrt(abs(f))
 
     MS_TH = (1/FS) - 1
     return(MS_TH)
 
 def TsaiWu(sigma, material):
-    sigma_1 = sigma[0]
-    sigma_2 = sigma[1]
-    sigma_12 = sigma[2]
+    sigma_1 = sigma[0][0]
+    sigma_2 = sigma[1][0]
+    sigma_12 = sigma[2][0]
 
-    Xt = material[4]
-    Yt = material[5]
-    Xc = material[6]
-    Yc = material[7]
-    S12 = material[8]
+    Xt = material[0]
+    Yt = material[1]
+    Xc = material[2]
+    Yc = material[3]
+    S12 = material[4]
 
     F1 = 1/Xt + 1/Xc
     F11 = - 1/(Xt*Xc)
@@ -48,23 +47,23 @@ def TsaiWu(sigma, material):
     A = F11*sigma_1**2 + F22*sigma_2**2 + F66*sigma_12**2 + 2*F12*sigma_1*sigma_2
     B = F1*sigma_1 + F2*sigma_2
 
-    Sf_mais = (-B + np.sqrt(B**2 + 4*A))/(2*A)
-    Sf_menos = abs((-B - np.sqrt(B**2 + 4*A))/(2*A))
+    Sf_mais = (-B + np.sqrt(abs(B**2 + 4*A)))/(2*A)
+    Sf_menos = abs((-B - np.sqrt(abs(B**2 + 4*A)))/(2*A))
     MS_mais = Sf_mais - 1
     MS_menos = Sf_menos - 1
-    
-    return(MS_mais, MS_menos)
+    MS_min = min([MS_mais, MS_menos])
+    return MS_min
 
 def MaxTensao(sigma, material):
-    sigma_1 = sigma[0]
-    sigma_2 = sigma[1]
-    sigma_12 = sigma[2]
+    sigma_1 = sigma[0][0]
+    sigma_2 = sigma[1][0]
+    sigma_12 = sigma[2][0]
 
-    Xt = material[4]
-    Yt = material[5]
-    Xc = material[6]
-    Yc = material[7]
-    S12 = material[8]
+    Xt = material[0]
+    Yt = material[1]
+    Xc = material[2]
+    Yc = material[3]
+    S12 = material[4]
     
     if sigma_1 > 0:
         MSx_max = Xt/sigma_1
